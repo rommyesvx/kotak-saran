@@ -25,12 +25,16 @@ try {
         $dbPath = __DIR__ . '/saran.db';
         $pdo = new PDO("sqlite:" . $dbPath);
     } else {
-        // Coba koneksi ke MySQL untuk membuat database terlebih dahulu jika belum ada
-        $dsnWithoutDb = "mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";charset=utf8mb4";
-        $pdoTemp = new PDO($dsnWithoutDb, DB_USER, DB_PASS);
-        $pdoTemp->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $pdoTemp->exec("CREATE DATABASE IF NOT EXISTS `" . DB_NAME . "` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
-        $pdoTemp = null; // Tutup koneksi sementara
+        // Coba koneksi ke MySQL untuk membuat database terlebih dahulu jika belum ada (untuk lokal)
+        try {
+            $dsnWithoutDb = "mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";charset=utf8mb4";
+            $pdoTemp = new PDO($dsnWithoutDb, DB_USER, DB_PASS);
+            $pdoTemp->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $pdoTemp->exec("CREATE DATABASE IF NOT EXISTS `" . DB_NAME . "` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+            $pdoTemp = null; 
+        } catch (PDOException $e) {
+            // Abaikan jika tidak punya hak akses CREATE DATABASE (seperti di Railway di mana DB sudah otomatis dibuat)
+        }
 
         $dsn = "mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME . ";charset=utf8mb4";
         $pdo = new PDO($dsn, DB_USER, DB_PASS);
