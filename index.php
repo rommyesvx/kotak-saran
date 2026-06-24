@@ -8,14 +8,14 @@ session_start();
 // ==========================================
 // 1. KONFIGURASI DATABASE
 // ==========================================
-define('DB_ENGINE', 'sqlite'); // Ubah ke 'mysql' jika ingin menggunakan MySQL
+define('DB_ENGINE', getenv('DB_ENGINE') ?: ($_ENV['DB_ENGINE'] ?? 'sqlite'));
 
 // Konfigurasi MySQL (hanya digunakan jika DB_ENGINE = 'mysql')
-define('DB_HOST', 'localhost');
-define('DB_PORT', '3306');
-define('DB_NAME', 'db_kotak_saran');
-define('DB_USER', 'root');
-define('DB_PASS', '');
+define('DB_HOST', getenv('MYSQLHOST') ?: ($_ENV['MYSQLHOST'] ?? 'localhost'));
+define('DB_PORT', getenv('MYSQLPORT') ?: ($_ENV['MYSQLPORT'] ?? '3306'));
+define('DB_NAME', getenv('MYSQLDATABASE') ?: ($_ENV['MYSQLDATABASE'] ?? 'db_kotak_saran'));
+define('DB_USER', getenv('MYSQLUSER') ?: ($_ENV['MYSQLUSER'] ?? 'root'));
+define('DB_PASS', getenv('MYSQLPASSWORD') ?: ($_ENV['MYSQLPASSWORD'] ?? ''));
 
 // ==========================================
 // 2. KONEKSI & MIGRASI DATABASE
